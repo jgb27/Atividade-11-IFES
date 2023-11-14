@@ -21,33 +21,33 @@ include_once '../includes/insert.php';
                 <tbody class="table-group-divider">
                     <?php
                     if (!empty($lista)) {
-                        foreach ($lista as $valorproduto) {
+                        foreach ($lista as $produto) {
                             ?>
                             <tr>
                                 <td>
-                                    <?php echo $valorproduto["id"] ?>
+                                    <?php echo $produto["id"] ?>
                                 </td>
                                 <td>
-                                    <?php echo $valorproduto["descricao"] ?>
+                                    <?php echo $produto["descricao"] ?>
                                 </td>
                                 <td>
-                                    <?php echo date("d/m/Y", strtotime($valorproduto["data"])); ?>
+                                    <?php echo date("d/m/Y", strtotime($produto["data"])); ?>
                                 </td>
                                 <td>
-                                    <?php echo $valorproduto["preco"] ?>
+                                    <?php echo $produto["preco"] ?>
                                 </td>
                                 <td>
-                                    <a href='./editar.php?id=<?php echo $valorproduto["id"]; ?>' class="btn btn-sm btn-primary">
+                                    <a href='./editar.php?id=<?php echo $produto["id"]; ?>' class="btn btn-sm btn-primary">
                                         Editar
                                     </a>
-                                    <a href='../controles/excluir.php?<?php echo $valorproduto["id"]; ?>'
+                                    <a href='../controles/excluir.php?<?php echo $produto["id"]; ?>'
                                         class="btn btn-sm btn-danger" data-bs-toggle='modal'
-                                        data-bs-target="#exampleModal<?php echo $valorproduto["id"]; ?>">
+                                        data-bs-target="#exampleModal<?php echo $produto["id"]; ?>">
                                         Excluir
                                     </a>
                                 </td>
                             </tr>
-                            <div class='modal fade' id="exampleModal<?php echo $valorproduto["id"]; ?>" tabindex='-1'
+                            <div class='modal fade' id="exampleModal<?php echo $produto["id"]; ?>" tabindex='-1'
                                 aria-labelledby='exampleModalLabel' aria-hidden='true'>
                                 <div class='modal-dialog modal-dialog-centered'>
                                     <div class='modal-content'>
@@ -58,12 +58,12 @@ include_once '../includes/insert.php';
                                         </div>
                                         <div class='modal-body mb-3 mt-3'>
                                             Tem certeza que deseja <b>EXCLUIR</b> o produto
-                                            <?php echo $valorproduto["descricao"]; ?>?
+                                            <?php echo $produto["descricao"]; ?>?
                                         </div>
                                         <div class='modal-footer'>
                                             <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Voltar
                                             </button>
-                                            <a href='../controles/excluir.php?id=<?php echo $valorproduto["id"]; ?>'
+                                            <a href='../controles/excluir.php?id=<?php echo $produto["id"]; ?>'
                                                 class="btn btn-danger">Excluir</a>
                                         </div>
                                     </div>

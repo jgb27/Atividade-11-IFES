@@ -1,24 +1,40 @@
 <?php
 session_start();
+include("./database.php");
 
-if (isset($_GET['codigo'])) {
-  $codigo = $_GET['codigo'];
+$database = new Database();
+$mysqli = $database->connect();
 
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
   $lista = isset($_SESSION['lista']) ? $_SESSION['lista'] : array();
 
-  $indiceParaExcluir = -1;
-  foreach ($lista as $indice => $produto) {
-    if ($produto["codigo"] == $codigo) {
-      $indiceParaExcluir = $indice;
-      break;
+  $sqlDelete = "DELETE FROM produto WHERE id = ?";
+  $stmtDelete = $mysqli->prepare($sqlDelete);
+  $stmtDelete->bind_param("d", $id);
+
+  if ($stmtDelete->execute()) {
+    $sqlSelect = "SELECT * FROM produto";
+    $resultSelect = $mysqli->query($sqlSelect);
+
+    if ($resultSelect) {
+      $lista = array();
+
+      while ($row = $resultSelect->fetch_assoc()) {
+        $lista[$row["id"]] = $row;
+      }
+
+      $_SESSION['lista'] = $lista;
+
+      $resultSelect->free();
+    } else {
+      echo "Error: " . $mysqli->error;
     }
+  } else {
+    echo "Error: " . $stmtDelete->error;
   }
 
-  if ($indiceParaExcluir !== -1) {
-    array_splice($lista, $indiceParaExcluir, 1);
-
-    $_SESSION['lista'] = $lista;
-  }
+  $stmtDelete->close();
 
   header("Location: ../pages/consultar.php");
   exit;
@@ -26,3 +42,5 @@ if (isset($_GET['codigo'])) {
   header("Location: ../pages/consultar.php");
   exit;
 }
+?>
+

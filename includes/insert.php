@@ -2,7 +2,7 @@
 include_once '../includes/header.php';
 include('../controles/database.php');
 
-$lista = array();
+$lista = isset($_SESSION['lista']) ? $_SESSION['lista'] : array();
 $erroData = '';
 
 $database = new Database();
@@ -62,6 +62,7 @@ if (isset($_POST['btn-cadastrar'])) {
 
 $resultSelect->close();
 $mysqli->close();
+$_SESSION['lista'] = $lista;
 ?>
 
 
@@ -87,7 +88,7 @@ $mysqli->close();
           <div class="col-4">
             <div class="col-2">
               <label for="idade" class="form-label">Preço</label>
-              <input type="number" class="form-control" id="preco" name="txtpreco" min="10" max="120">
+              <input type="number" class="form-control" id="preco" name="txtpreco">
             </div>
           </div>
         </div>
