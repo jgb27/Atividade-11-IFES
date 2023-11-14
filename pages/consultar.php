@@ -34,7 +34,7 @@ include_once '../includes/insert.php';
                                     <?php echo date("d/m/Y", strtotime($produto["data"])); ?>
                                 </td>
                                 <td>
-                                    <?php echo $produto["preco"] ?>
+                                    <?php echo "R$ " . number_format($produto["preco"], 2, ',', '.') ?>
                                 </td>
                                 <td>
                                     <a href='./editar.php?id=<?php echo $produto["id"]; ?>' class="btn btn-sm btn-primary">

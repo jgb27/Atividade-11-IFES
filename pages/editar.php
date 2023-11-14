@@ -2,14 +2,14 @@
 session_start();
 include_once '../includes/header.php';
 
-if (isset($_GET['codigo'])) {
-  $codigo = $_GET['codigo'];
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
 
   $lista = isset($_SESSION['lista']) ? $_SESSION['lista'] : array();
 
   $indiceParaEditar = -1;
   foreach ($lista as $indice => $produto) {
-    if ($produto["codigo"] == $codigo) {
+    if ($produto["id"] == $id) {
       $indiceParaEditar = $indice;
       break;
     }
@@ -23,7 +23,7 @@ if (isset($_GET['codigo'])) {
       $data = $_POST['data'];
       $preco = $_POST['preco'];
 
-      $lista[$indiceParaEditar]['desc'] = $descricao;
+      $lista[$indiceParaEditar]['descricao'] = $descricao;
       $lista[$indiceParaEditar]['data'] = $data;
       $lista[$indiceParaEditar]['preco'] = $preco;
 
@@ -33,7 +33,7 @@ if (isset($_GET['codigo'])) {
       exit;
     }
 
-?>
+    ?>
 
     <div class="container">
       <div class="row justify-content-center">
@@ -44,10 +44,11 @@ if (isset($_GET['codigo'])) {
             </div>
             <div class="card-body">
               <form action="../controles/salvar_edicao.php" method="post">
-                <input type="hidden" name="codigo" value="<?php echo $codigo; ?>">
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <div class="mb-3">
                   <label for="descricao" class="form-label">Descrição:</label>
-                  <input type="text" name="descricao" value="<?php echo $produtoParaEditar['desc']; ?>" class="form-control" required>
+                  <input type="text" name="descricao" value="<?php echo $produtoParaEditar['descricao']; ?>"
+                    class="form-control" required>
                 </div>
                 <div class="mb-3">
                   <label for="data" class="form-label">Data Inclusão:</label>
@@ -66,7 +67,7 @@ if (isset($_GET['codigo'])) {
       </div>
     </div>
 
-<?php
+    <?php
 
   } else {
     header("Location: consultar.php");
@@ -78,3 +79,4 @@ if (isset($_GET['codigo'])) {
 }
 include_once '../includes/footer.php';
 ?>
+

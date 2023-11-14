@@ -1,43 +1,46 @@
 <?php
 session_start();
+include("./../controles/database.php");
+
+$database = new Database();
+$mysqli = $database->connect();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $codigo = $_POST['codigo'];
+    $id = $_POST['id'];
     $descricao = $_POST['descricao'];
     $data = $_POST['data'];
     $preco = $_POST['preco'];
 
-    // Recupere a lista de produtos da sessão
-    $lista = isset($_SESSION['lista']) ? $_SESSION['lista'] : array();
+    $sqlUpdate = "UPDATE produto SET descricao = ?, data = ?, preco = ? WHERE id = ?";
+    $stmtUpdate = $mysqli->prepare($sqlUpdate);
+    $stmtUpdate->bind_param("ssdd", $descricao, $data, $preco, $id);
 
-    // Encontre o índice do produto a ser editado na lista
-    $indiceParaEditar = -1;
-    foreach ($lista as $indice => $produto) {
-        if ($produto["codigo"] == $codigo) {
-            $indiceParaEditar = $indice;
-            break;
+    if ($stmtUpdate->execute()) {
+        $sqlSelect = "SELECT * FROM produto";
+        $resultSelect = $mysqli->query($sqlSelect);
+
+        if ($resultSelect) {
+            $lista = array();
+
+            while ($row = $resultSelect->fetch_assoc()) {
+                $lista[$row["id"]] = $row;
+            }
+
+            $_SESSION['lista'] = $lista;
+
+            $resultSelect->free();
+        } else {
+            echo "Error: " . $mysqli->error;
         }
-    }
-
-    if ($indiceParaEditar !== -1) {
-        // Atualize os detalhes do produto com base nos dados enviados
-        $lista[$indiceParaEditar]['desc'] = $descricao;
-        $lista[$indiceParaEditar]['data'] = $data;
-        $lista[$indiceParaEditar]['preco'] = $preco;
-
-        // Atualize a lista na sessão
-        $_SESSION['lista'] = $lista;
-
-        // Redirecione de volta para a página consultar.php após a edição
-        header("Location: ../pages/consultar.php");
-        exit;
     } else {
-        // Produto não encontrado, redirecione para a página consultar.php
-        header("Location: ../pages/consultar.php");
-        exit;
+        echo "Error: " . $stmtUpdate->error;
     }
+
+    $stmtUpdate->close();
+
+    header("Location: ../pages/consultar.php");
+    exit;
 } else {
-    // Método incorreto, redirecione para a página consultar.php
     header("Location: ../pages/consultar.php");
     exit;
 }

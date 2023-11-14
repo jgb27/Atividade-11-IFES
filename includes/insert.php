@@ -88,7 +88,7 @@ $_SESSION['lista'] = $lista;
           <div class="col-4">
             <div class="col-2">
               <label for="idade" class="form-label">Preço</label>
-              <input type="number" class="form-control" id="preco" name="txtpreco">
+              <input type="number" class="form-control" id="preco" name="txtpreco" step="0.01">
             </div>
           </div>
         </div>
